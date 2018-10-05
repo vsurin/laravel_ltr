@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
-    public $layout = 'backend.layouts.default';
-
     public function index()
     {
         return view('backend.home.index');

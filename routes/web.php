@@ -15,7 +15,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => 'auth'], function()
+Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']], function()
 {
     Route::get('/', 'HomeController@index');
 });
@@ -24,4 +24,3 @@ Route::group(['namespace' => 'Frontend'], function()
 {
     Route::get('/', 'HomeController@index');
 });
-

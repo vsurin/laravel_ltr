@@ -1,15 +1,16 @@
-@extends('backend.layouts.default')
+@extends('adminlte::page')
 
-@section('title')
-    Заголовок страницы
-@stop
+@section('title', 'Dashboard')
 
 @section('content_header')
-    header
-@stop
-
-@section('tratatatatatatat')
-    aaaaaaaaaaaaaaaaaaaaaaa
+    <h1>
+        Dashboard
+        <small>Version 2.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+    </ol>
 @stop
 
 @section('content')

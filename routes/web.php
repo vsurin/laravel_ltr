@@ -16,5 +16,10 @@ Auth::routes();
 Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']], function()
 {
     Route::get('/', 'HomeController@index');
+    Route::resource('/users', 'UserController');
 });
 
+Route::group(['namespace' => 'Frontend', 'middleware' => ['auth']], function()
+{
+    Route::get('/', 'HomeController@index');
+});

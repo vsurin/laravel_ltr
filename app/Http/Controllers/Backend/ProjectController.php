@@ -14,12 +14,13 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     * @throws \Throwable
      */
     public function index(Request $request)
     {
-        $project = new Project;
-        $projects = $project->latest('created_at')->paginate(10);
+        $projects = Project::filter()->paginate(10);
 
         if ($request->ajax()) {
             return view('backend.project.load', ['projects' => $projects])->render();
@@ -35,9 +36,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $project = Project::pluck('title', 'id');
-
-        return view('backend.project.create', compact('project'));
+        return view('backend.project.create', ['project' => new Project]);
     }
 
     /**
@@ -51,7 +50,6 @@ class ProjectController extends Controller
         $data = $request->all();
         $data['start'] = '2018-10-09 11:57:38';
         $data['end'] = '2018-10-09 11:57:38';
-        $data['type_id'] = 1;
         $data['links'] = str_random(10);
 
         Project::create($data);
@@ -137,7 +135,7 @@ class ProjectController extends Controller
             $data['role'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(6, $row)->getValue();
             $data['links'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(7, $row)->getValue();
             //$data['skils'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(8, $row)->getValue();
-            $data['type_id'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(9, $row)->getValue();
+            $data['type'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(9, $row)->getValue();
 
             Project::create($data);
         }
@@ -148,30 +146,50 @@ class ProjectController extends Controller
 
     public function export()
     {
-        $data = Project::get()->toArray();
+        $projects = Project::get()->toArray();
+        $file = 'upload/csv/test.csv';
 
         $excel = new Spreadsheet();
 
-        for($i = 0; $i < 5; $i++) {
+        foreach ($projects as $key => $project) {
             $sheet = $excel->setActiveSheetIndex(0);
-            $cell = $sheet->getCell('A'.$i);
-            $cell->setValue('Test '.$i);
+            $cell = $sheet->getCell('A'.$key);
+            $cell->setValue($project['title']);
 
-            $cell = $sheet->getCell('B'.$i);
-            $cell->setValue('B Test '.$i);
+            $cell = $sheet->getCell('B'.$key);
+            $cell->setValue($project['descrription']);
 
-            $cell = $sheet->getCell('C'.$i);
-            $cell->setValue('C Test '.$i);
+            $cell = $sheet->getCell('C'.$key);
+            $cell->setValue($project['organization']);
+
+            $cell = $sheet->getCell('D'.$key);
+            $cell->setValue($project['start']);
+
+            $cell = $sheet->getCell('E'.$key);
+            $cell->setValue($project['end']);
+
+            $cell = $sheet->getCell('F'.$key);
+            $cell->setValue($project['role']);
+
+            $cell = $sheet->getCell('G'.$key);
+            $cell->setValue($project['links']);
+
+            $cell = $sheet->getCell('H'.$key);
+            $cell->setValue($project['type']);
         }
 
-
         $excelWriter = new WriteCsv($excel);
+        $excelWriter->save($file);
+        chmod(realpath($file), 0777);
 
-        $excelWriter->save('upload/csv/test.csv');
+        if (file_exists($file)) {
+            header("Content-Description: File Transfer");
+            header("Content-Type: application/octet-stream");
+            header("Content-Disposition: attachment; filename=" . basename($file));
 
-
-        echo 1111;
-        die;
+            readfile ($file);
+            exit();
+        }
     }
 
     /**

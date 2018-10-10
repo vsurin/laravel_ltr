@@ -20,7 +20,7 @@ class ProjectsTableSeeder extends Seeder
                 'end' => '2018-10-09 14:13:30',
                 'role' => str_random(10),
                 'links' => str_random(10),
-                'type_id' => 1,
+                'type' => str_random(10),
             ]);
         }
     }

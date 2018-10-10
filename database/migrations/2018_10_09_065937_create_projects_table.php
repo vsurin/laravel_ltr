@@ -22,7 +22,7 @@ class CreateProjectsTable extends Migration
             $table->date('end');
             $table->string('role');
             $table->string('links');
-            $table->integer('type_id');
+            $table->string('type');
             $table->timestamps();
         });
     }

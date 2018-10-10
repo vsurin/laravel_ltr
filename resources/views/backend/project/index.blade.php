@@ -30,14 +30,40 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-xs-2  col-sm-2 col-md-2">
+            <div><strong>Title</strong></div>
+            <input type="text" id="title">
+        </div>
+        <div class="col-xs-2  col-sm-2 col-md-2">
+            <div><strong>Organization</strong></div>
+            <input type="text" id="organization">
+        </div>
+        <div class="col-xs-2  col-sm-2 col-md-2">
+            <div><strong>Type</strong></div>
+            <input type="text" id="filtertype">
+        </div>
+    </div>
+
     <div class="projects" id="load">
         @include('backend.project.load')
     </div>
 
     <script type="text/javascript">
-
         (function($){
             $(function() {
+                $('#title').on('input', function() {
+                    getProjects(location.href);
+                });
+
+                $('#organization').on('input', function() {
+                    getProjects(location.href);
+                });
+
+                $('#filtertype').on('input', function() {
+                    getProjects(location.href);
+                });
+
                 $('body').on('click', '.pagination a', function(e) {
                     e.preventDefault();
 
@@ -48,8 +74,13 @@
                 });
 
                 function getProjects(url) {
+                    var title = $('#title').val();
+                    var organization = $('#organization').val();
+                    var filtertype = $('#filtertype').val();
+
                     $.ajax({
-                        url : url
+                        url : url,
+                        data: {title: title, organization: organization, filtertype: filtertype}
                     }).done(function (data) {
                         $('.projects').html(data);
                     }).fail(function () {

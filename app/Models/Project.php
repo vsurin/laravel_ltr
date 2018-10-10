@@ -19,14 +19,45 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'descrription', 'organization', 'start', 'end', 'role', 'links', 'skils', 'type_id',
+        'title', 'descrription', 'organization', 'start', 'end', 'role', 'links', 'skils', 'type',
     ];
 
     /**
-     * todo: написать документацию
+     * Get types
+     *
+     * @return array
      */
     public function getTypes()
     {
-        return $this->hasOne('App\Models\ProjectType', 'id');
+        return [
+            'Work' => 'Work',
+            'Book' => 'Book',
+            'Course' => 'Course',
+            'Blog' => 'Blog',
+            'Other' => 'Other'
+        ];
+    }
+
+    /**
+     * Set Filter
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeFilter($query)
+    {
+        if (request('title')) {
+            $query->where('title', 'like', '%'.request('title').'%');
+        }
+
+        if (request('organization')) {
+            $query->where('organization', 'like', '%'.request('organization').'%');
+        }
+
+        if (request('filtertype')) {
+            $query->where('type', 'like', '%'.request('filtertype').'%');
+        }
+
+        return $query;
     }
 }

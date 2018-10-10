@@ -34,6 +34,11 @@
             <label>Links:</label>
             {{ Form::text('links', null, ['class' => 'form-control']) }}
         </div>
+
+        <div class="form-group">
+            <label>Type:</label>
+            {{ Form::select('type', $project->getTypes(), ['class' => 'form-control']) }}
+        </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 text-right">
         <button type="submit" class="btn btn-primary">Submit</button>

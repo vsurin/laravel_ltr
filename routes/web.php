@@ -22,6 +22,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => ['a
     Route::get('/project/import', 'ProjectController@import')->middleware('admin')->name('admin.project.import');
     Route::post('/project/parserFile', 'ProjectController@parserFile')->middleware('admin')->name('admin.project.parserFile');
     Route::get('/project/export', 'ProjectController@export')->middleware('admin')->name('admin.project.export');
+    Route::post('/project/generate-pdf','ProjectController@generatePDF')->name('admin.project.pdf');
 });
 
 Route::group(['namespace' => 'Frontend', 'middleware' => ['auth']], function()

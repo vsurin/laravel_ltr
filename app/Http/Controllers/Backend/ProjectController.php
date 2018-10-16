@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Backend;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FileRequest;
+use App\Http\Requests\ProjectRequest;
+use App\Models\Csv;
+use App\Models\File;
 use App\Models\Project;
-use PhpOffice\PhpSpreadsheet\Reader\Csv;
-use PhpOffice\PhpSpreadsheet\Writer\Csv as WriteCsv;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use App\Models\Xlsx;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -42,10 +45,10 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param ProjectRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(ProjectRequest $request)
     {
         $data = $request->all();
         $data['start'] = '2018-10-09 11:57:38';
@@ -87,13 +90,14 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param ProjectRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProjectRequest $request, $id)
     {
         Project::find($id)->update($request->All());
+
         return redirect()->route('projects.index')
             ->with('success','Project updated successfully');
     }
@@ -107,107 +111,66 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         Project::find($id)->delete();
+
         return redirect()->route('projects.index')
             ->with('success','Project deleted successfully');
     }
 
     public function import()
     {
-        $project = new Project();
+        $project = new Project;
 
         return view('backend.project.import', compact('project'));
     }
 
-    public function parserFile(Request $request)
+    /**
+     * Parse the file with projects in DB
+     *
+     * @param FileRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function parserFile(FileRequest $request)
     {
-        $file = $this->uploadFile($request);
+        $file = $request->file('file');
 
-        $reader = new Csv;
-        $spreadsheet = $reader->load('upload/csv/'.$file);
-        $cells = $spreadsheet->getActiveSheet()->getCellCollection();
+        $fileType = $file->getClientOriginalExtension();
+        $dirFile = 'upload/projects/'.File::upload($file, 'upload/projects/');
 
-        for ($row = 2; $row <= $cells->getHighestRow(); $row++){
-            $data['title'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(1, $row)->getValue();
-            $data['descrription'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(2, $row)->getValue();
-            $data['organization'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(3, $row)->getValue();
-            $data['start'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(4, $row)->getValue();
-            $data['end'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(5, $row)->getValue();
-            $data['role'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(6, $row)->getValue();
-            $data['links'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(7, $row)->getValue();
-            //$data['skils'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(8, $row)->getValue();
-            $data['type'] = $spreadsheet->getActiveSheet()->getCellByColumnAndRow(9, $row)->getValue();
-
-            Project::create($data);
+        if ($fileType == 'csv') {
+            $csv = new Csv;
+            $csv->import($dirFile);
+        } elseif ($fileType == 'xlsx') {
+            $xlsx = new Xlsx;
+            $xlsx->import($dirFile);
         }
 
         return redirect()->route('admin.project.import')
             ->with('success','Projects import successfully');
     }
 
+    /**
+     * Export projects in file
+     */
     public function export()
     {
         $projects = Project::get()->toArray();
-        $file = 'upload/csv/test.csv';
+        $file = 'upload/projects/export_projects.csv';
 
-        $excel = new Spreadsheet();
-
-        foreach ($projects as $key => $project) {
-            $sheet = $excel->setActiveSheetIndex(0);
-            $cell = $sheet->getCell('A'.$key);
-            $cell->setValue($project['title']);
-
-            $cell = $sheet->getCell('B'.$key);
-            $cell->setValue($project['descrription']);
-
-            $cell = $sheet->getCell('C'.$key);
-            $cell->setValue($project['organization']);
-
-            $cell = $sheet->getCell('D'.$key);
-            $cell->setValue($project['start']);
-
-            $cell = $sheet->getCell('E'.$key);
-            $cell->setValue($project['end']);
-
-            $cell = $sheet->getCell('F'.$key);
-            $cell->setValue($project['role']);
-
-            $cell = $sheet->getCell('G'.$key);
-            $cell->setValue($project['links']);
-
-            $cell = $sheet->getCell('H'.$key);
-            $cell->setValue($project['type']);
-        }
-
-        $excelWriter = new WriteCsv($excel);
-        $excelWriter->save($file);
-        chmod(realpath($file), 0777);
-
-        if (file_exists($file)) {
-            header("Content-Description: File Transfer");
-            header("Content-Type: application/octet-stream");
-            header("Content-Disposition: attachment; filename=" . basename($file));
-
-            readfile ($file);
-            exit();
-        }
+        $csv = new Csv;
+        $csv->export($projects, $file);
     }
 
     /**
-     * Upload csv
+     * Genereta pdf file
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
+     * @param ProjectRequest $request
+     * @return mixed
      */
-    private function uploadFile(Request $request){
-        $file = $request->file('file');
+    public function generatePDF(ProjectRequest $request)
+    {
+        $data['title'] = 'sdfsdfsdfsdfsdf';
+        $pdf = PDF::loadView('backend.project.pdf', $data);
 
-        if ($file) {
-            $name = md5(microtime() . rand(0, 9999)).'_'.$file->getClientOriginalName();
-            $file->move('upload/csv/', $name);
-
-            return $name;
-        }
-
-        return '';
+        return $pdf->download('test.pdf');
     }
 }

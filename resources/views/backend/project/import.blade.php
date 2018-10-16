@@ -9,16 +9,27 @@
 @stop
 
 @section('content')
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    {{ $message }}
-                </div>
-            @endif
+    @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-    </div>
+    @else
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                @if ($message = Session::get('success'))
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        {{ $message }}
+                    </div>
+                @endif
+            </div>
+        </div>
+    @endif
 
     {!! Form::open(['method' => 'POST','route' => ['admin.project.parserFile'], 'enctype' => 'multipart/form-data']) !!}
         <div class="row">

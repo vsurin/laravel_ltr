@@ -22,7 +22,7 @@
                     <td>{{ $project->start }}</td>
                     <td>{{ $project->end }}</td>
                     <td>{{ $project->role }}</td>
-                    <td>{{ $project->links }}</td>
+                    <td>{{ $project->link }}</td>
                     <td>{{ $project->type }}</td>
                     <td>
                         <a class="btn btn-info" href="{{ route('projects.show', $project->id) }}">Show</a>

@@ -148,6 +148,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         JeroenNoten\LaravelAdminLte\ServiceProvider::class,
         Unisharp\Ckeditor\ServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -212,6 +213,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Pdf' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Traits\ProjectRulesTrait;
 
 class Project extends Model
 {
+    use ProjectRulesTrait;
+
     /**
      * Associated with the model table.
      *
@@ -19,7 +22,7 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'descrription', 'organization', 'start', 'end', 'role', 'links', 'skils', 'type',
+        'title', 'descrription', 'organization', 'start', 'end', 'role', 'link', 'skils', 'type',
     ];
 
     /**

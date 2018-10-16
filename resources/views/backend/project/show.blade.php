@@ -10,6 +10,14 @@
 
 @section('content')
     <div class="row">
+        <div class="col-lg-12 margin-tb">
+            <div class="pull-right">
+                <a class="btn btn-primary" id="generate" href="{{ route('admin.project.pdf') }}">Generate PDF</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div>
                 <label>Title:</label>
@@ -41,4 +49,23 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        (function($){
+            $(function() {
+                $('#generate').on('click', function() {
+                    $.ajax({
+                        url : location.href,
+                        data: {title: 'test'}
+                    }).done(function (data) {
+                        console.log(data);
+                    }).fail(function () {
+                        alert('Projects could not be loaded.');
+                    });
+                });
+            });
+        })(jQuery);
+    </script>
 @endsection

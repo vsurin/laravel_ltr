@@ -31,8 +31,8 @@
         </div>
 
         <div class="form-group">
-            <label>Links:</label>
-            {{ Form::text('links', null, ['class' => 'form-control']) }}
+            <label>Link:</label>
+            {{ Form::text('link', null, ['class' => 'form-control']) }}
         </div>
 
         <div class="form-group">

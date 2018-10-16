@@ -21,7 +21,7 @@ class CreateProjectsTable extends Migration
             $table->date('start');
             $table->date('end');
             $table->string('role');
-            $table->string('links');
+            $table->string('link');
             $table->string('type');
             $table->timestamps();
         });

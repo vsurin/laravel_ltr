@@ -15,17 +15,28 @@ Auth::routes();
 
 Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => ['auth']], function()
 {
-    Route::get('/', 'HomeController@index');
+    Route::get('/', 'HomeController@index')->name('admin.home.index');
+
     Route::get('/profile', 'HomeController@edit')->name('admin.profile.edit');
     Route::resource('/users', 'UserController')->middleware('admin');
-    Route::resource('/projects', 'ProjectController')->middleware('admin');
+    Route::resource('/projects', 'ProjectController');
     Route::get('/project/import', 'ProjectController@import')->middleware('admin')->name('admin.project.import');
     Route::post('/project/parserFile', 'ProjectController@parserFile')->middleware('admin')->name('admin.project.parserFile');
     Route::get('/project/export', 'ProjectController@export')->middleware('admin')->name('admin.project.export');
-    Route::post('/project/generate-pdf','ProjectController@generatePDF')->name('admin.project.pdf');
+    Route::get('/project/generate-pdf','ProjectController@generatePDF')->name('admin.project.pdf');
+    Route::get('/project/generate-pdf/{id}','ProjectController@generatePDF');
+
+    Route::get('/api/projects/{limit}/{offset}','ApiController@index');
+    Route::get('/api/project/show/{project}','ApiController@show');
+    Route::get('/api/project/destroy/{id}','ApiController@destroy');
+    Route::post('/api/project/create','ApiController@create')->name('admin.api.project.create');
+    Route::get('/api/project/create-test','ApiController@createTest');
+    Route::post('/api/project/update/{id}','ApiController@update')->name('admin.api.project.update');
+    Route::get('/api/project/update-test/{id}','ApiController@updateTest');
 });
 
 Route::group(['namespace' => 'Frontend', 'middleware' => ['auth']], function()
 {
-    Route::get('/', 'HomeController@index');
+    Route::post('/update/{user}', 'HomeController@update')->name('frontend.home.update');
+    Route::get('/', 'HomeController@index')->name('home/index');
 });

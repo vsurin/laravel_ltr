@@ -53,9 +53,11 @@ class ProjectController extends Controller
         $data = $request->all();
         $data['start'] = '2018-10-09 11:57:38';
         $data['end'] = '2018-10-09 11:57:38';
-        $data['links'] = str_random(10);
+        $data['link'] = str_random(10);
 
-        Project::create($data);
+        $project = Project::create($data);
+
+        Project::createSkills($request, $project->id);
 
         return redirect()->route('projects.index')
             ->with('success','Projects created successfully');
@@ -98,6 +100,8 @@ class ProjectController extends Controller
     {
         Project::find($id)->update($request->All());
 
+        Project::createSkills($request, $id);
+
         return redirect()->route('projects.index')
             ->with('success','Project updated successfully');
     }
@@ -128,6 +132,9 @@ class ProjectController extends Controller
      *
      * @param FileRequest $request
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
     public function parserFile(FileRequest $request)
     {
@@ -153,7 +160,7 @@ class ProjectController extends Controller
      */
     public function export()
     {
-        $projects = Project::get()->toArray();
+        $projects = Project::all();
         $file = 'upload/projects/export_projects.csv';
 
         $csv = new Csv;
@@ -163,14 +170,15 @@ class ProjectController extends Controller
     /**
      * Genereta pdf file
      *
-     * @param ProjectRequest $request
+     * @param Int $id
      * @return mixed
      */
-    public function generatePDF(ProjectRequest $request)
+    public function generatePDF(Int $id)
     {
-        $data['title'] = 'sdfsdfsdfsdfsdf';
-        $pdf = PDF::loadView('backend.project.pdf', $data);
+        $project = Project::find($id);
 
-        return $pdf->download('test.pdf');
+        $pdf = PDF::loadView('backend.project.pdf', compact('project'));
+
+        return $pdf->download('project.pdf');
     }
 }

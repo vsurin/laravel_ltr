@@ -1,4 +1,4 @@
-@extends('backend.layouts.default')
+@extends('adminlte::page')
 
 @section('content_header')
     <h1>Create project</h1>
@@ -9,7 +9,7 @@
 @stop
 
 @section('content')
-    {!! Form::open(array('route' => 'projects.store','method'=>'POST', 'enctype' => 'multipart/form-data')) !!}
+    {!! Form::open(array('route' => 'admin.api.project.create','method'=>'POST', 'enctype' => 'multipart/form-data')) !!}
     @include('backend.project.form')
     {!! Form::close() !!}
 @endsection

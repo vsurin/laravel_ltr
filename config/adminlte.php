@@ -124,7 +124,6 @@ return [
             'text' => 'All Projects',
             'url'  => 'admin/projects',
             'icon' => 'folder',
-            'can' => true,
         ],
         [
             'text' => 'Import',

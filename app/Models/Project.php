@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Traits\ProjectRulesTrait;
+use Illuminate\Support\Facades\DB;
 
 class Project extends Model
 {
@@ -24,6 +25,8 @@ class Project extends Model
     protected $fillable = [
         'title', 'descrription', 'organization', 'start', 'end', 'role', 'link', 'skils', 'type',
     ];
+
+    protected $guarded = ['skills'];
 
     /**
      * Get types
@@ -62,5 +65,41 @@ class Project extends Model
         }
 
         return $query;
+    }
+
+    /**
+     * Get the comments for the blog post.
+     */
+    public function skills()
+    {
+        return $this->hasMany('App\Models\ProjectSkill');
+    }
+
+    /**
+     * Create skills
+     *
+     * @param $request
+     * @param $id
+     */
+    public static function createSkills($request, $id)
+    {
+        DB::table('projects_skills')
+            ->where('project_id', '=', $id)
+            ->delete();
+
+        $project = $request->All();
+
+        if (empty($project['skills'])) {
+            return false;
+        }
+
+        foreach ($project['skills'] as $value) {
+            $data = [
+                'project_id' => $id,
+                'value' => $value
+            ];
+
+            ProjectSkill::create($data);
+        }
     }
 }

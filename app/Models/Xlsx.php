@@ -23,27 +23,57 @@ class Xlsx extends Project
 
         DB::transaction(function () use($cells, $spreadsheet, $dataColName){
             for ($row = 2; $row <= $cells->getHighestRow(); $row++) {
-                $title = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['title'], $row)->getValue();
-                $descrription = $spreadsheet->getActiveSheet()
-                    ->getCellByColumnAndRow($dataColName['description'], $row)->getValue();
-                $organization = $spreadsheet->getActiveSheet()
-                    ->getCellByColumnAndRow($dataColName['organization'], $row)->getValue();
-                $start = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['start'], $row)->getValue();
-                $end = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['end'], $row)->getValue();
-                $role = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['role'], $row)->getValue();
-                $link = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['link'], $row)->getValue();
-                //$skils = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['skils'], $row)->getValue();
-                $type = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['type'], $row)->getValue();
+                if (isset($dataColName['title'])) {
+                    $title = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['title'], $row)->getValue();
+                    $data['title'] = $title;
+                }
 
-                $data['title'] = $title;
-                $data['descrription'] = $descrription;
-                $data['organization'] = $organization;
-                $data['start'] = $start;
-                $data['end'] = $end;
-                $data['role'] = $role;
-                $data['link'] = $link;
-                //$data['skils'] = $skils;
-                $data['type'] = $type;
+                if (isset($dataColName['description'])) {
+                    $descrription = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['description'], $row)->getValue();
+                    $data['descrription'] = $descrription;
+                }
+
+                if (isset($dataColName['organization'])) {
+                    $organization = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['organization'], $row)->getValue();
+                    $data['organization'] = $organization;
+                }
+
+                if (isset($dataColName['start'])) {
+                    $start = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['start'], $row)->getValue();
+                    $data['start'] = $start;
+                }
+
+                if (isset($dataColName['end'])) {
+                    $end = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['end'], $row)->getValue();
+                    $data['end'] = $end;
+                }
+
+                if (isset($dataColName['role'])) {
+                    $role = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['role'], $row)->getValue();
+                    $data['role'] = $role;
+                }
+
+                if (isset($dataColName['link'])) {
+                    $link = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['link'], $row)->getValue();
+                    $data['link'] = $link;
+                }
+
+                if (isset($dataColName['type'])) {
+                    $type = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['type'], $row)->getValue();
+                    $data['type'] = $type;
+                }
+
+                if (isset($dataColName['skills'])) {
+                    $skills = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['skills'], $row)->getValue();
+                }
 
                 $validator = Validator::make($data, $this->rules());
 
@@ -53,7 +83,15 @@ class Xlsx extends Project
                     return redirect()->route('admin.project.import')->withErrors($validator->errors());
                 }
 
-                Project::create($data);
+                $project = Project::create($data);
+
+                if (isset($skills)) {
+                    $skills = explode(',', $skills);
+
+                    foreach ($skills as $skill) {
+                        ProjectSkill::create(['project_id' => $project->id, 'value' => $skill]);
+                    }
+                }
             }
         });
     }

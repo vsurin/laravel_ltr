@@ -3,9 +3,9 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Dashboard</div>
+                <div class="card-header"><a href="/admin">Admin</a></div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,7 +14,9 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    {!! Form::model($user, ['method' => 'post','route' => ['frontend.home.update', $user->id], 'enctype' => 'multipart/form-data']) !!}
+                    @include('frontend.home.form')
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>

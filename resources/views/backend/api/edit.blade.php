@@ -1,4 +1,4 @@
-@extends('backend.layouts.default')
+@extends('adminlte::page')
 
 @section('content_header')
     <h1>Edit project</h1>
@@ -9,7 +9,7 @@
 @stop
 
 @section('content')
-    {!! Form::model($project, ['method' => 'PATCH','route' => ['projects.update', $project->id], 'enctype' => 'multipart/form-data']) !!}
-    @include('backend.project.form')
+    {!! Form::model($project, ['method' => 'post','route' => ['admin.api.project.update', $project->id]]) !!}
+    @include('backend.api.form')
     {!! Form::close() !!}
 @endsection

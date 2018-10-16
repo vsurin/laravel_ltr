@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+@extends('backend.layouts.default')
 
 @section('content_header')
     <h1>Show project</h1>
@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-right">
-                <a class="btn btn-primary" id="generate" href="{{ route('admin.project.pdf') }}">Generate PDF</a>
+                <a class="btn btn-primary" id="generate" href="{{ route('admin.project.pdf') }}/{{ $project->id }}">Generate PDF</a>
             </div>
         </div>
     </div>
@@ -47,25 +47,20 @@
                 <label>Type:</label>
                 {!! $project->type !!}
             </div>
+            <div>
+                <label>Skils:</label>
+                @foreach ($project->skills as $skill)
+                    @if($project->skills->last() != $skill)
+                        {{ $skill->value }},
+                    @else
+                        {{ $skill->value }}
+                    @endif
+                @endforeach
+            </div>
+            <div>
+                <label>Description:</label>
+                {!! $project->descrription !!}
+            </div>
         </div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-
-    <script type="text/javascript">
-        (function($){
-            $(function() {
-                $('#generate').on('click', function() {
-                    $.ajax({
-                        url : location.href,
-                        data: {title: 'test'}
-                    }).done(function (data) {
-                        console.log(data);
-                    }).fail(function () {
-                        alert('Projects could not be loaded.');
-                    });
-                });
-            });
-        })(jQuery);
-    </script>
 @endsection

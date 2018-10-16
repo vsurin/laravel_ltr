@@ -32,27 +32,57 @@ class Csv extends Project
 
         DB::transaction(function () use($cells, $spreadsheet, $dataColName){
             for ($row = 2; $row <= $cells->getHighestRow(); $row++) {
-                $title = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['title'], $row)->getValue();
-                $descrription = $spreadsheet->getActiveSheet()
-                    ->getCellByColumnAndRow($dataColName['description'], $row)->getValue();
-                $organization = $spreadsheet->getActiveSheet()
-                    ->getCellByColumnAndRow($dataColName['organization'], $row)->getValue();
-                $start = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['start'], $row)->getValue();
-                $end = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['end'], $row)->getValue();
-                $role = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['role'], $row)->getValue();
-                $link = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['link'], $row)->getValue();
-                //$skils = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['skils'], $row)->getValue();
-                $type = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['type'], $row)->getValue();
+                if (isset($dataColName['title'])) {
+                    $title = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['title'], $row)->getValue();
+                    $data['title'] = $title;
+                }
 
-                $data['title'] = $title;
-                $data['descrription'] = $descrription;
-                $data['organization'] = $organization;
-                $data['start'] = $start;
-                $data['end'] = $end;
-                $data['role'] = $role;
-                $data['link'] = $link;
-                //$data['skils'] = $skils;
-                $data['type'] = $type;
+                if (isset($dataColName['description'])) {
+                    $descrription = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['description'], $row)->getValue();
+                    $data['descrription'] = $descrription;
+                }
+
+                if (isset($dataColName['organization'])) {
+                    $organization = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['organization'], $row)->getValue();
+                    $data['organization'] = $organization;
+                }
+
+                if (isset($dataColName['start'])) {
+                    $start = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['start'], $row)->getValue();
+                    $data['start'] = $start;
+                }
+
+                if (isset($dataColName['end'])) {
+                    $end = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['end'], $row)->getValue();
+                    $data['end'] = $end;
+                }
+
+                if (isset($dataColName['role'])) {
+                    $role = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['role'], $row)->getValue();
+                    $data['role'] = $role;
+                }
+
+                if (isset($dataColName['link'])) {
+                    $link = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($dataColName['link'], $row)->getValue();
+                    $data['link'] = $link;
+                }
+
+                if (isset($dataColName['type'])) {
+                    $type = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['type'], $row)->getValue();
+                    $data['type'] = $type;
+                }
+
+                if (isset($dataColName['skills'])) {
+                    $skills = $spreadsheet->getActiveSheet()
+                        ->getCellByColumnAndRow($dataColName['skills'], $row)->getValue();
+                }
 
                 $validator = Validator::make($data, $this->rules());
 
@@ -62,12 +92,20 @@ class Csv extends Project
                     return redirect()->route('admin.project.import')->withErrors($validator->errors());
                 }
 
-                Project::create($data);
+                $project = Project::create($data);
+
+                if (isset($skills)) {
+                    $skills = explode(',', $skills);
+
+                    foreach ($skills as $skill) {
+                        ProjectSkill::create(['project_id' => $project->id, 'value' => $skill]);
+                    }
+                }
             }
         });
     }
 
-    public function export(Array $projects, String $file)
+    public function export($projects, String $file)
     {
         $excel = new Spreadsheet();
 
@@ -96,31 +134,45 @@ class Csv extends Project
         $cell = $sheet->getCell('H1');
         $cell->setValue('Type');
 
+        $cell = $sheet->getCell('I1');
+        $cell->setValue('Skills');
+
         foreach ($projects as $key => $project) {
             $colomn = $key + 2;
             $cell = $sheet->getCell('A'. $colomn);
-            $cell->setValue($project['title']);
+            $cell->setValue($project->title);
 
             $cell = $sheet->getCell('B'.$colomn);
-            $cell->setValue($project['descrription']);
+            $cell->setValue($project->descrription);
 
             $cell = $sheet->getCell('C'.$colomn);
-            $cell->setValue($project['organization']);
+            $cell->setValue($project->organization);
 
             $cell = $sheet->getCell('D'.$colomn);
-            $cell->setValue($project['start']);
+            $cell->setValue($project->start);
 
             $cell = $sheet->getCell('E'.$colomn);
-            $cell->setValue($project['end']);
+            $cell->setValue($project->end);
 
             $cell = $sheet->getCell('F'.$colomn);
-            $cell->setValue($project['role']);
+            $cell->setValue($project->role);
 
             $cell = $sheet->getCell('G'.$colomn);
-            $cell->setValue($project['link']);
+            $cell->setValue($project->link);
 
             $cell = $sheet->getCell('H'.$colomn);
-            $cell->setValue($project['type']);
+            $cell->setValue($project->type);
+
+            if (isset($project->skills)) {
+                $resultSkills = [];
+                foreach ($project->skills as $skill) {
+                    $resultSkills[] = $skill->value;
+                }
+                $resultSkills = implode(', ', $resultSkills);
+
+                $cell = $sheet->getCell('I'.$colomn);
+                $cell->setValue($resultSkills);
+            }
         }
 
         $excelWriter = new WriteCsv($excel);

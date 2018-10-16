@@ -28,7 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $user = User::pluck('name', 'email');
+        $user = new User;
 
         return view('backend.user.create', compact('user'));
     }

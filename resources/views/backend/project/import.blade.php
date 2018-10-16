@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+@extends('backend.layouts.default')
 
 @section('content_header')
     <h1>Import project</h1>

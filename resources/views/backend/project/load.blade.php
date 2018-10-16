@@ -34,13 +34,18 @@
                     </td>
                 </tr>
             @endforeach
+
+        @else
+            <tr><td colspan="9">Not found projects</td></tr>
         @endif
     </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="9">
-                {{ $projects->links() }}
-            </td>
-        </tr>
-    </tfoot>
+    @if (count($projects) > 0)
+        <tfoot>
+            <tr>
+                <td colspan="9">
+                    {{ $projects->links() }}
+                </td>
+            </tr>
+        </tfoot>
+    @endif
 </table>

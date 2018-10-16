@@ -71,30 +71,55 @@ class Csv extends Project
     {
         $excel = new Spreadsheet();
 
+        $sheet = $excel->setActiveSheetIndex(0);
+        $cell = $sheet->getCell('A1');
+        $cell->setValue('Title');
+
+        $cell = $sheet->getCell('B1');
+        $cell->setValue('Description');
+
+        $cell = $sheet->getCell('C1');
+        $cell->setValue('Organization');
+
+        $cell = $sheet->getCell('D1');
+        $cell->setValue('Start');
+
+        $cell = $sheet->getCell('E1');
+        $cell->setValue('End');
+
+        $cell = $sheet->getCell('F1');
+        $cell->setValue('Role');
+
+        $cell = $sheet->getCell('G1');
+        $cell->setValue('Link');
+
+        $cell = $sheet->getCell('H1');
+        $cell->setValue('Type');
+
         foreach ($projects as $key => $project) {
-            $sheet = $excel->setActiveSheetIndex(0);
-            $cell = $sheet->getCell('A'.$key);
+            $colomn = $key + 2;
+            $cell = $sheet->getCell('A'. $colomn);
             $cell->setValue($project['title']);
 
-            $cell = $sheet->getCell('B'.$key);
+            $cell = $sheet->getCell('B'.$colomn);
             $cell->setValue($project['descrription']);
 
-            $cell = $sheet->getCell('C'.$key);
+            $cell = $sheet->getCell('C'.$colomn);
             $cell->setValue($project['organization']);
 
-            $cell = $sheet->getCell('D'.$key);
+            $cell = $sheet->getCell('D'.$colomn);
             $cell->setValue($project['start']);
 
-            $cell = $sheet->getCell('E'.$key);
+            $cell = $sheet->getCell('E'.$colomn);
             $cell->setValue($project['end']);
 
-            $cell = $sheet->getCell('F'.$key);
+            $cell = $sheet->getCell('F'.$colomn);
             $cell->setValue($project['role']);
 
-            $cell = $sheet->getCell('G'.$key);
+            $cell = $sheet->getCell('G'.$colomn);
             $cell->setValue($project['link']);
 
-            $cell = $sheet->getCell('H'.$key);
+            $cell = $sheet->getCell('H'.$colomn);
             $cell->setValue($project['type']);
         }
 

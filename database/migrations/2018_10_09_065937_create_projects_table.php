@@ -18,8 +18,8 @@ class CreateProjectsTable extends Migration
             $table->string('title');
             $table->text('descrription');
             $table->string('organization')->nullable();
-            $table->date('start');
-            $table->date('end');
+            $table->date('start')->nullable();
+            $table->date('end')->nullable();
             $table->string('role');
             $table->string('link')->nullable();
             $table->string('type');

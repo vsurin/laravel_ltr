@@ -33,22 +33,6 @@ class Project extends Model
     protected $guarded = ['skills'];
 
     /**
-     * Get types
-     *
-     * @return array
-     */
-    public function getTypes()
-    {
-        return [
-            'Work' => 'Work',
-            'Book' => 'Book',
-            'Course' => 'Course',
-            'Blog' => 'Blog',
-            'Other' => 'Other'
-        ];
-    }
-
-    /**
      * Set Filter
      *
      * @param $query

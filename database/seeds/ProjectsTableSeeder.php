@@ -30,7 +30,7 @@ class ProjectsTableSeeder extends Seeder
                 'organization' => str_random(mt_rand(4, 10)),
                 'start' => date('Y-m-d', $randStrTime),
                 'end' => date("Y-m-d", $date),
-                'role' => str_random(10),
+                'role' => array_rand(['admin' => 'admin', 'user' => 'user'], 1),
                 'link' => 'http://'.str_random(10).'.com',
                 'type' =>  array_rand($project->getTypes(), 1),
             ]);

@@ -26,18 +26,29 @@
         </div>
 
         <div class="form-group">
-            <label>Role:</label>
-            {{ Form::text('role', null, ['class' => 'form-control']) }}
+            <label>Start:</label>
+            {{ Form::date('start', null, ['class' => 'form-control']) }}
         </div>
 
+        <div class="form-group">
+            <label>End:</label>
+            {{ Form::date('end', null, ['class' => 'form-control']) }}
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-6">
         <div class="form-group">
             <label>Link:</label>
             {{ Form::text('link', null, ['class' => 'form-control']) }}
         </div>
 
         <div class="form-group">
+            <label>Role:</label>
+            {{ Form::select('role', $project->getRoles(), $project->role, ['class' => 'form-control']) }}
+        </div>
+
+        <div class="form-group">
             <label>Type:</label>
-            {{ Form::select('type', $project->getTypes(), ['class' => 'form-control']) }}
+            {{ Form::select('type', $project->getTypes(), $project->type, ['class' => 'form-control']) }}
         </div>
 
         <div>
@@ -51,9 +62,10 @@
                     </li>
                 @endforeach
             </ul>
-            <input type="text" value="" id="inputSkill">
+            <input type="text" value="" id="inputSkill" class="form-control">
         </div>
     </div>
+
     <div class="col-xs-12 col-sm-12 col-md-12 text-right">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>

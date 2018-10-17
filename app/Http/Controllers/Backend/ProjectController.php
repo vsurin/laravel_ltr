@@ -11,6 +11,7 @@ use App\Models\Project;
 use App\Models\Xlsx;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -51,9 +52,6 @@ class ProjectController extends Controller
     public function store(ProjectRequest $request)
     {
         $data = $request->all();
-        $data['start'] = '2018-10-09 11:57:38';
-        $data['end'] = '2018-10-09 11:57:38';
-        $data['link'] = str_random(10);
 
         $project = Project::create($data);
 
@@ -86,6 +84,10 @@ class ProjectController extends Controller
     {
         $project = Project::find($id);
 
+        if ($project->role == 'admin' && Auth::user()->role == 'user') {
+            return redirect('/admin');
+        }
+
         return view('backend.project.edit', compact('project'));
     }
 
@@ -98,6 +100,10 @@ class ProjectController extends Controller
      */
     public function update(ProjectRequest $request, $id)
     {
+        if ($request->all()['role'] != 'admin' && Auth::user()->role != 'admin') {
+            return redirect('/admin');
+        }
+
         Project::find($id)->update($request->All());
 
         Project::createSkills($request, $id);
@@ -114,7 +120,12 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        Project::find($id)->delete();
+        $project = Project::find($id);
+        if ($project->role != 'admin' && Auth::user()->role != 'admin') {
+            return redirect('/admin');
+        }
+
+        $project->delete();
 
         return redirect()->route('projects.index')
             ->with('success','Project deleted successfully');

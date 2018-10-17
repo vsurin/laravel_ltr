@@ -17,11 +17,11 @@ class CreateProjectsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('descrription');
-            $table->string('organization');
+            $table->string('organization')->nullable();
             $table->date('start');
             $table->date('end');
             $table->string('role');
-            $table->string('link');
+            $table->string('link')->nullable();
             $table->string('type');
             $table->timestamps();
         });

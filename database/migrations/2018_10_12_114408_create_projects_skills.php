@@ -32,10 +32,10 @@ class CreateProjectsSkills extends Migration
      */
     public function down()
     {
-        Schema::table('projects_skils', function (Blueprint $table) {
+        Schema::table('projects_skills', function (Blueprint $table) {
             $table->dropForeign(['project_id']);
         });
 
-        Schema::dropIfExists('projects_skils');
+        Schema::dropIfExists('projects_skills');
     }
 }

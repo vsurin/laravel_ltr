@@ -26,11 +26,13 @@
                     <td>{{ $project->type }}</td>
                     <td>
                         <a class="btn btn-info" href="{{ route('projects.show', $project->id) }}">Show</a>
-                        <a class="btn btn-primary" href="{{ route('projects.edit', $project->id) }}">Edit</a>
+                        @if (Auth::user()->role == 'admin' || ($project->role == 'user' && Auth::user()->role == 'user'))
+                            <a class="btn btn-primary" href="{{ route('projects.edit', $project->id) }}">Edit</a>
 
-                        {!! Form::open(['method' => 'DELETE','route' => ['projects.destroy', $project->id],'style'=>'display:inline']) !!}
-                        {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                        {!! Form::close() !!}
+                            {!! Form::open(['method' => 'DELETE','route' => ['projects.destroy', $project->id],'style'=>'display:inline']) !!}
+                            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+                            {!! Form::close() !!}
+                        @endif
                     </td>
                 </tr>
             @endforeach

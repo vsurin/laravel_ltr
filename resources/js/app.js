@@ -1,3 +1,25 @@
+window.Vue = require('vue');
+
+import index from './components/Index.vue';
+import create from './components/Create.vue';
+
+const app = new Vue({
+    el: '#app',
+    components: {
+        index,
+        create,
+    },
+    data: {
+        currentComponent: index,
+    },
+    methods: {
+        swapComponent: function(component) {
+            console.log(create);
+            this.currentComponent = component;
+        }
+    }
+});
+
 (function($){
     $(function() {
         $('#inputSkill').on('keypress', function(e) {
@@ -36,8 +58,6 @@
             });
         }
 
-
-        // index
         $('#title').on('input', function() {
             getProjects(location.href);
         });
@@ -73,6 +93,5 @@
                 alert('Projects could not be loaded.');
             });
         }
-
     });
 })(jQuery);

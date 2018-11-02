@@ -1102,7 +1102,8 @@ var app = new Vue({
     el: '#app',
     components: {
         index: __WEBPACK_IMPORTED_MODULE_0__components_Index_vue___default.a,
-        show: __WEBPACK_IMPORTED_MODULE_2__components_Show_vue___default.a
+        show: __WEBPACK_IMPORTED_MODULE_2__components_Show_vue___default.a,
+        create: __WEBPACK_IMPORTED_MODULE_1__components_Create_vue___default.a
     }
 });
 
@@ -14321,7 +14322,14 @@ var staticRenderFns = [
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-lg-12 margin-tb" }, [
         _c("div", { staticClass: "pull-right" }, [
-          _c("a", { staticClass: "btn btn-primary" }, [_vm._v("Add Project")])
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "/admin/projects-vue/create" }
+            },
+            [_vm._v("Add Project")]
+          )
         ])
       ])
     ])
@@ -14448,6 +14456,59 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -14456,10 +14517,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            title: '',
+            descrription: '',
+            organization: '',
+            start: '',
+            end: '',
+            link: '',
+            role: 'admin',
+            type: 'Work',
+            result: {}
+        };
+    },
     methods: {
-        swapComponent: function swapComponent(component) {
-            this.$root.currentComponent = component;
+        create: function create() {
+            var _this = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/admin/api/project/create', {
+                title: this.title,
+                descrription: this.descrription,
+                organization: this.organization,
+                start: '2007-01-13',
+                end: '2007-01-13',
+                role: 'admin',
+                link: 'http://2RuzX977Bz.com',
+                type: 'Work'
+            }).then(function (response) {
+                _this.result = response;
+            }).catch(function (e) {
+                console.error(e);
+            });
         }
     }
 });
@@ -14475,18 +14566,258 @@ var render = function() {
   return _c("div", [
     _c("h3", [_vm._v("Create")]),
     _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "btn btn-info",
-        on: {
-          click: function($event) {
-            _vm.swapComponent("index")
-          }
-        }
-      },
-      [_vm._v("Go Index")]
-    )
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Title:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.title,
+                expression: "title"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text" },
+            domProps: { value: _vm.title },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.title = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Description:")]),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.descrription,
+                expression: "descrription"
+              }
+            ],
+            staticClass: "form-control",
+            domProps: { value: _vm.descrription },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.descrription = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Organization:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.organization,
+                expression: "organization"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text" },
+            domProps: { value: _vm.organization },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.organization = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Start:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.start,
+                expression: "start"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "date" },
+            domProps: { value: _vm.start },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.start = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("End:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.end,
+                expression: "end"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "date" },
+            domProps: { value: _vm.end },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.end = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Link:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.link,
+                expression: "link"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text" },
+            domProps: { value: _vm.link },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.link = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Role:")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.role,
+                  expression: "role"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.role = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "admin" } }, [_vm._v("admin")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "user" } }, [_vm._v("user")])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Type:")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.type,
+                  expression: "type"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.type = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "Work" } }, [_vm._v("Work")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "Book" } }, [_vm._v("Book")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "Course" } }, [_vm._v("Course")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "Blog" } }, [_vm._v("Blog")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "Other" } }, [_vm._v("Other")])
+            ]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-xs-12 col-sm-12 col-md-12 text-right" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", on: { click: _vm.create } },
+        [_vm._v("Submit")]
+      )
+    ])
   ])
 }
 var staticRenderFns = []

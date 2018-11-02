@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-lg-12 margin-tb">
                 <div class="pull-right">
-                    <a class="btn btn-primary">Add Project</a>
+                    <a class="btn btn-primary" href="/admin/projects-vue/create">Add Project</a>
                 </div>
             </div>
         </div>

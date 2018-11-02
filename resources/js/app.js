@@ -8,7 +8,8 @@ const app = new Vue({
     el: '#app',
     components: {
         index,
-        show
+        show,
+        create
     }
 });
 

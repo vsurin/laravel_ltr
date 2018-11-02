@@ -37,6 +37,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => ['a
 
     Route::get('/projects-vue', 'ProjectVueController@index');
     Route::get('/projects-vue/show/{id}', 'ProjectVueController@show');
+    Route::get('/projects-vue/create', 'ProjectVueController@create');
 });
 
 Route::group(['namespace' => 'Frontend', 'middleware' => ['auth']], function()

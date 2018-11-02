@@ -27,4 +27,14 @@ class ProjectVueController extends Controller
     {
         return view('backend.project-vue.show', compact('id'));
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('backend.project-vue.create');
+    }
 }

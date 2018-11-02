@@ -79,15 +79,14 @@
                     title: this.title,
                     descrription: this.descrription,
                     organization: this.organization,
-                    start: '2007-01-13',
-                    end: '2007-01-13',
-                    role: 'admin',
-                    link: 'http://2RuzX977Bz.com',
-                    type: 'Work',
-                }).then((response) => {this.result = response})
-                    .catch((e) => {
+                    start: this.start,
+                    end: this.end,
+                    role: this.role,
+                    link: this.link,
+                    type: this.type,
+                }).then((response) => {this.result = response}) .catch((e) => {
                         console.error(e)
-                    });
+                });
             }
         }
     }

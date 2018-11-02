@@ -12533,6 +12533,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -12547,7 +12557,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             page: 1,
             title: '',
             organization: '',
-            filterType: ''
+            filterType: '',
+            isMessage: false,
+            message: ''
         };
     },
 
@@ -12596,6 +12608,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var result = '/' + (this.title ? this.title : '0') + '/' + (this.organization ? this.organization : '0') + '/' + (this.filterType ? this.filterType : '0');
 
             return result;
+        },
+        deleteProject: function deleteProject(id) {
+            var _this3 = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/admin/api/project/destroy/' + id).then(function (response) {
+                _this3.getProjects(), _this3.isMessage = true, _this3.message = 'Project was deleted';
+            });
+        },
+        closeMessage: function closeMessage() {
+            this.isMessage = false;
         }
     }
 });
@@ -14170,6 +14192,31 @@ var render = function() {
   return _c("div", [
     _vm._m(0),
     _vm._v(" "),
+    _vm.isMessage
+      ? _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-xs-12 col-sm-12 col-md-12" }, [
+            _c(
+              "div",
+              { staticClass: "alert alert-success alert-dismissible" },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button" },
+                    on: { click: _vm.closeMessage }
+                  },
+                  [_vm._v("×")]
+                ),
+                _vm._v(
+                  "\n                " + _vm._s(_vm.message) + "\n            "
+                )
+              ]
+            )
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-xs-2  col-sm-2 col-md-2" }, [
         _vm._m(1),
@@ -14302,6 +14349,19 @@ var render = function() {
                   attrs: { href: "/admin/projects-vue/update/" + project.id }
                 },
                 [_vm._v("Edit")]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-danger",
+                  on: {
+                    click: function($event) {
+                      _vm.deleteProject(project.id)
+                    }
+                  }
+                },
+                [_vm._v("Delete")]
               )
             ])
           ])

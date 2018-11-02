@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-lg-12 margin-tb">
                 <div class="pull-right">
-                    <a @click="swapComponent('create')" class="btn btn-primary">Add Project</a>
+                    <a class="btn btn-primary">Add Project</a>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
                 <td>{{ project.type }}</td>
                 <td>{{ project.type }}</td>
                 <td>
-                    <a class="btn btn-info" href="#">Show</a>
+                    <a class="btn btn-info" href="/admin/projects-vue/show">Show</a>
                 </td>
             </tr>
             </tbody>
@@ -88,7 +88,8 @@
             this.getTotal();
         },
         methods: {
-            swapComponent: function(component) {
+            swapComponent: function(component, dataVar) {
+                this.$root.dataVar = dataVar;
                 this.$root.currentComponent = component;
             },
 

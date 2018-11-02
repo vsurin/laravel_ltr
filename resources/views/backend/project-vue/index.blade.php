@@ -2,6 +2,6 @@
 
 @section('content')
     <div id="app">
-        <div :is="currentComponent"></div>
+        <index></index>
     </div>
 @endsection

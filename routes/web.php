@@ -36,6 +36,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => ['a
     Route::get('/api/project/count/{title?}/{organization?}/{filtertype?}','ApiController@count');
 
     Route::get('/projects-vue', 'ProjectVueController@index');
+    Route::get('/projects-vue/show/{id}', 'ProjectVueController@show');
 });
 
 Route::group(['namespace' => 'Frontend', 'middleware' => ['auth']], function()

@@ -8,6 +8,15 @@
             </div>
         </div>
 
+        <div class="row" v-if="isMessage">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" v-on:click="closeMessage">×</button>
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-xs-2  col-sm-2 col-md-2">
                 <div><strong>Title</strong></div>
@@ -50,6 +59,7 @@
                 <td>
                     <a class="btn btn-info" v-bind:href="'/admin/projects-vue/show/' + project.id" >Show</a>
                     <a class="btn btn-primary" v-bind:href="'/admin/projects-vue/update/'  + project.id">Edit</a>
+                    <a class="btn btn-danger" v-on:click="deleteProject(project.id)">Delete</a>
                 </td>
             </tr>
             </tbody>
@@ -79,6 +89,8 @@
                 title: '',
                 organization: '',
                 filterType: '',
+                isMessage: false,
+                message: '',
             }
         },
         components: {
@@ -121,6 +133,18 @@
                     + (this.filterType ? this.filterType : '0');
 
                 return result;
+            },
+            deleteProject(id) {
+                axios
+                    .get('/admin/api/project/destroy/'+id)
+                    .then((response) => {
+                        this.getProjects(),
+                        this.isMessage = true,
+                        this.message = 'Project was deleted'
+                    });
+            },
+            closeMessage() {
+                this.isMessage = false;
             },
         },
     }

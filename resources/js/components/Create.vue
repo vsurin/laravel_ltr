@@ -1,5 +1,17 @@
 <template>
     <div>
+        <div class="row" v-if="messageIsActive">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div v-bind:class="{'alert-error': hasError, 'alert-success': !hasError}" class="alert alert-dismissible">
+                    <button type="button" class="close" @click="closeMessage">×</button>
+                    <ul>
+                        <li v-for="error in errors">
+                            {{ error }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="form-group">
@@ -68,7 +80,13 @@
                 link: '',
                 role: 'admin',
                 type: 'Work',
-                result: {}
+                result: {},
+                messageIsActive: false,
+                hasError: false,
+                errors: [],
+                fieldValidation: [
+                    'title', 'link', 'descrription', 'start', 'end', 'role'
+                ]
             }
         },
         methods: {
@@ -82,9 +100,38 @@
                     role: this.role,
                     link: this.link,
                     type: this.type,
-                }).then((response) => {this.result = response}) .catch((e) => {
-                        console.error(e)
+                }).then((response) => {
+                    this.result = response,
+                    this.validation()
+                })
+                  .catch((e) => {
+                    console.error(e)
                 });
+            },
+            closeMessage: function() {
+                this.messageIsActive = false;
+            },
+            validation() {
+                this.errors = [];
+
+                for (var i = 0; i < this.fieldValidation.length; i++) {
+                    var item = this.fieldValidation[i];
+
+                    if (this.result.data.message[item]) {
+                        if (this.result.data.message[item][0] != null) {
+                            this.errors.push(this.result.data.message[item][0]);
+                            this.hasError = false;
+                        }
+                    }
+                }
+
+                this.hasError = true;
+                if (this.errors.length == 0) {
+                    this.hasError = false;
+                    this.errors.push('Project was created');
+                }
+
+                this.messageIsActive = true;
             }
         }
     }

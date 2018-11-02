@@ -56,16 +56,17 @@ class ApiController extends Controller
      */
     public function create(Request $request)
     {
-        $data = $request->all();
-        $data['start'] = '2018-10-09 11:57:38';
-        $data['end'] = '2018-10-09 11:57:38';
-        $data['link'] = str_random(10);
+        $validator = Validator::make($request->all(), $this->rules());
 
-        $project = Project::create($data);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->messages()]);
+        }
+
+        $project = Project::create($request->all());
 
         Project::createSkills($request, $project->id);
 
-        return response()->json(['message' => 'Project '.$project->id.' - was created']);
+        return response()->json(['message' => 'Project ' . $project->id . ' - was created']);
     }
 
     /**

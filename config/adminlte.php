@@ -119,6 +119,12 @@ return [
             'icon' => 'user',
             'can' => true,
         ],
+        'Projects - Vue',
+        [
+            'text' => 'All Projects',
+            'url'  => 'admin/projects-vue',
+            'icon' => 'folder',
+        ],
         'Projects',
         [
             'text' => 'All Projects',

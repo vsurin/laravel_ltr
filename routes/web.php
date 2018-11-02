@@ -26,13 +26,19 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => ['a
     Route::get('/project/generate-pdf','ProjectController@generatePDF')->name('admin.project.pdf');
     Route::get('/project/generate-pdf/{id}','ProjectController@generatePDF');
 
-    Route::get('/api/projects/{limit}/{offset}','ApiController@index');
+    Route::get('/api/projects/{limit}/{offset}/{title?}/{organization?}/{filtertype?}','ApiController@index');
     Route::get('/api/project/show/{project}','ApiController@show');
     Route::get('/api/project/destroy/{id}','ApiController@destroy');
     Route::post('/api/project/create','ApiController@create')->name('admin.api.project.create');
     Route::get('/api/project/create-test','ApiController@createTest');
     Route::post('/api/project/update/{id}','ApiController@update')->name('admin.api.project.update');
     Route::get('/api/project/update-test/{id}','ApiController@updateTest');
+    Route::get('/api/project/count/{title?}/{organization?}/{filtertype?}','ApiController@count');
+
+    Route::get('/projects-vue', 'ProjectVueController@index');
+    Route::get('/projects-vue/show/{id}', 'ProjectVueController@show');
+    Route::get('/projects-vue/create', 'ProjectVueController@create');
+    Route::get('/projects-vue/update/{id}', 'ProjectVueController@update');
 });
 
 Route::group(['namespace' => 'Frontend', 'middleware' => ['auth']], function()

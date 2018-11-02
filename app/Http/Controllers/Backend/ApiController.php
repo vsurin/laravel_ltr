@@ -19,11 +19,9 @@ class ApiController extends Controller
      * @param int $offset
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(int $limit, int $offset)
+    public function index(int $limit, int $offset, $title = '', $organization = '', $filtertype = '')
     {
-        $projects = Project::filter()->offset($offset)->limit($limit)->get();
-
-        return response()->json(['projects' => $projects]);
+        return $projects = Project::filter()->limit($limit)->offset($offset)->get();
     }
 
     /**
@@ -111,5 +109,15 @@ class ApiController extends Controller
         $project = Project::find($id);
 
         return view('backend.api.edit', compact('project'));
+    }
+
+    /**
+     * Get count records
+     *
+     * @return mixed
+     */
+    public function count($title = '', $organization = '', $filtertype = '')
+    {
+        return Project::filter()->count();
     }
 }

@@ -131,8 +131,10 @@
                     var item = this.fieldValidation[i];
 
                     if (this.result.data.message[item]) {
-                        this.errors.push(this.result.data.message[item][0]);
-                        this.hasError = false;
+                        if (this.result.data.message[item][0] != null) {
+                            this.errors.push(this.result.data.message[item][0]);
+                            this.hasError = false;
+                        }
                     }
                 }
 

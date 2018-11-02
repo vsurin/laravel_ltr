@@ -2,6 +2,6 @@
 
 @section('content')
     <div id="app">
-        <show idr="{{ $id  }}"></show>
+        <show id="{{ $id  }}"></show>
     </div>
 @endsection

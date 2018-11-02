@@ -48,7 +48,8 @@
                 <td>{{ project.type }}</td>
                 <td>{{ project.type }}</td>
                 <td>
-                    <a class="btn btn-info" href="/admin/projects-vue/show">Show</a>
+                    <a class="btn btn-info" v-bind:href="'/admin/projects-vue/show/' + project.id" >Show</a>
+                    <a class="btn btn-primary" v-bind:href="'/admin/projects-vue/update/'  + project.id">Edit</a>
                 </td>
             </tr>
             </tbody>

@@ -3,13 +3,15 @@ window.Vue = require('vue');
 import index from './components/Index.vue';
 import create from './components/Create.vue';
 import show from './components/Show.vue';
+import update from './components/Update.vue';
 
 const app = new Vue({
     el: '#app',
     components: {
         index,
         show,
-        create
+        create,
+        update,
     }
 });
 

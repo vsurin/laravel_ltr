@@ -14582,6 +14582,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -14596,7 +14608,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             link: '',
             role: 'admin',
             type: 'Work',
-            result: {}
+            result: {},
+            messageIsActive: false,
+            hasError: false,
+            errors: [],
+            fieldValidation: ['title', 'link', 'descrription', 'start', 'end', 'role']
         };
     },
     methods: {
@@ -14613,10 +14629,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 link: this.link,
                 type: this.type
             }).then(function (response) {
-                _this.result = response;
+                _this.result = response, _this.validation();
             }).catch(function (e) {
                 console.error(e);
             });
+        },
+        closeMessage: function closeMessage() {
+            this.messageIsActive = false;
+        },
+        validation: function validation() {
+            this.errors = [];
+
+            for (var i = 0; i < this.fieldValidation.length; i++) {
+                var item = this.fieldValidation[i];
+
+                if (this.result.data.message[item]) {
+                    if (this.result.data.message[item][0] != null) {
+                        this.errors.push(this.result.data.message[item][0]);
+                        this.hasError = false;
+                    }
+                }
+            }
+
+            this.hasError = true;
+            if (this.errors.length == 0) {
+                this.hasError = false;
+                this.errors.push('Project was created');
+            }
+
+            this.messageIsActive = true;
         }
     }
 });
@@ -14630,6 +14671,47 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _vm.messageIsActive
+      ? _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-xs-12 col-sm-12 col-md-12" }, [
+            _c(
+              "div",
+              {
+                staticClass: "alert alert-dismissible",
+                class: {
+                  "alert-error": _vm.hasError,
+                  "alert-success": !_vm.hasError
+                }
+              },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button" },
+                    on: { click: _vm.closeMessage }
+                  },
+                  [_vm._v("×")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "ul",
+                  _vm._l(_vm.errors, function(error) {
+                    return _c("li", [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(error) +
+                          "\n                    "
+                      )
+                    ])
+                  })
+                )
+              ]
+            )
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6" }, [
         _c("div", { staticClass: "form-group" }, [
@@ -15234,6 +15316,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -15256,7 +15342,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 role: 'admin',
                 type: 'Work'
             },
-            messageIsActive: false
+            messageIsActive: false,
+            hasError: false,
+            errors: [],
+            fieldValidation: ['title', 'link', 'descrription', 'start', 'end', 'role']
         };
     },
     mounted: function mounted() {
@@ -15283,13 +15372,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 link: this.project.link,
                 type: this.project.type
             }).then(function (response) {
-                _this2.result = response, _this2.messageIsActive = true;
+                _this2.result = response, _this2.validation();
             }).catch(function (e) {
                 console.error(e);
             });
         },
         closeMessage: function closeMessage() {
             this.messageIsActive = false;
+        },
+        validation: function validation() {
+            this.errors = [];
+
+            for (var i = 0; i < this.fieldValidation.length; i++) {
+                var item = this.fieldValidation[i];
+
+                if (this.result.data.message[item]) {
+                    if (this.result.data.message[item][0] != null) {
+                        this.errors.push(this.result.data.message[item][0]);
+                        this.hasError = false;
+                    }
+                }
+            }
+
+            this.hasError = true;
+            if (this.errors.length == 0) {
+                this.hasError = false;
+                this.errors.push('Project was updates');
+            }
+
+            this.messageIsActive = true;
         }
     }
 });
@@ -15303,6 +15414,47 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _vm.messageIsActive
+      ? _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-xs-12 col-sm-12 col-md-12" }, [
+            _c(
+              "div",
+              {
+                staticClass: "alert alert-dismissible",
+                class: {
+                  "alert-error": _vm.hasError,
+                  "alert-success": !_vm.hasError
+                }
+              },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button" },
+                    on: { click: _vm.closeMessage }
+                  },
+                  [_vm._v("×")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "ul",
+                  _vm._l(_vm.errors, function(error) {
+                    return _c("li", [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(error) +
+                          "\n                    "
+                      )
+                    ])
+                  })
+                )
+              ]
+            )
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6" }, [
         _c("div", { staticClass: "form-group" }, [
@@ -15558,34 +15710,7 @@ var render = function() {
         { staticClass: "btn btn-primary", on: { click: _vm.update } },
         [_vm._v("Update")]
       )
-    ]),
-    _vm._v(" "),
-    _vm.messageIsActive
-      ? _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-xs-12 col-sm-12 col-md-12" }, [
-            _c(
-              "div",
-              { staticClass: "alert alert-success alert-dismissible" },
-              [
-                _c(
-                  "button",
-                  {
-                    staticClass: "close",
-                    attrs: { type: "button" },
-                    on: { click: _vm.closeMessage }
-                  },
-                  [_vm._v("×")]
-                ),
-                _vm._v(
-                  "\n                " +
-                    _vm._s(_vm.result.data.message) +
-                    "\n            "
-                )
-              ]
-            )
-          ])
-        ])
-      : _vm._e()
+    ])
   ])
 }
 var staticRenderFns = []
